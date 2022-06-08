@@ -1,0 +1,13 @@
+Dataset: 
+	4 genres : Metal, Classica, Jazz, Rap 
+	Balanced Dataset After dropping duplicates 
+	200 datapoint per genere
+	Features : Acousticness, Danceability, Duration, Energy, Instrumentalness, Key, mode, 
+		   Loudness(db), speechness, tempo(Bpm), Time signature, Valence(?)[0;1]. Date. Popularity, Y.
+	Image: Cover of the album -> We might want as many albums as possible.
+
+what we wanna do ??? : 
+	1. We can cluster the songs (Kmean, MoG) with all the model selection stuff .... possibly bootstrapping each genres.
+	2. SVM
+	3. Some regression (Duaration - popularity)
+	4. implementing a decision tree from scartch and comparison with SVM
