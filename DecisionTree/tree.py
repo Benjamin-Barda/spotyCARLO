@@ -1,33 +1,21 @@
 import numpy as np 
 import pandas as pd
-
-dF = pd.read_csv('data//csvs//dataframeV1.csv', index_col=0)
-dF = dF.drop(['id', 'uri'], axis = 1)
-dF.head()
-
-dF.label = pd.Categorical(dF.label)
-dF['Y'] = dF.label.cat.codes
-dF = dF.drop(['label'], axis = 1)
-dF.head()
-
-
-class Node : 
-
-    def __init__(self, feature = None, thresh = None,  left = None, right = None, value = None) : 
-
-        self.feature = feature
-        self.value = value
-        self.left = left
-        self.right = right
-        self.thresh = thresh
-    
-    def is_leaf(self): 
-        return self.value is not None
-
+from node import Node
 
 class Tree : 
+    """
+    This class provides the methods to create, tune, and use a simple decision tree 
+    classification Algorithm
+    """
 
     def __init__(self, max_depth = 6, min_sample_per_split=2) : 
+        """
+        Args: 
+            {int} max_depth : Max depth the tree can reach 
+            {int} min_sample_per_split : Minimum number of samples in order to be able to perform a split in a node
+        Return: 
+            {Tree} self : Initialize the Tree object
+        """
 
         self.max_depth = max_depth 
         self.min_sample_per_split = min_sample_per_split
@@ -37,13 +25,14 @@ class Tree :
         """
         Split on X based on thresh
 
-        args : 
-            X : axis 
-            thresh : value of split
-        return : 
-            left_idx : where X <= thresh
-            right_idx : where X > thresh
+        Args : 
+            {np.ndarray} X : Observations 
+            {int}   thresh : value of split
+        Return : 
+            {np.array} left_idx  : where X <= thresh
+            {np.array} right_idx : where X > thresh
         """
+
         left_idx = np.argwhere(X <= thresh).flatten()
         right_idx = np.argwhere(X > thresh).flatten()
 
@@ -52,17 +41,30 @@ class Tree :
     def _entropyImpurity(self, Y) : 
         """
         Calculate the entropy impurity on Y
+
+        Args: 
+            {np.array} Y : Lables on which to calculate entropy impurity
+        Return: 
+            {float32} entropy : Entropy impurity (ref. https://en.wikipedia.org/wiki/Entropy_(information_theory) )
+
         """
-        
-        _, c = np.unique(Y, return_counts=True)
-        a =  c / Y.shape[0]
+
+        a =  np.bincount(Y) / Y.shape[0]
         entropy = - np.sum(a * np.log2(a + 1e-9))
         return entropy
 
     def _infGain(self, X, y, thresh) : 
         """
-        Calculate the information gain. 
+        Calculate the information gain.
+
+        Args: 
+            {np.ndarray} X : Observations
+            {np.array}   y : Labels for X's observations
+            {int}   thresh : Threshhold on which to calculate the split
+        Return: 
+            {int} information Gain : Information gain after the split on thresh (ref https://en.wikipedia.org/wiki/Information_gain_in_decision_trees )
         """
+
         my_loss = self._entropyImpurity(y)
 
 
@@ -75,7 +77,14 @@ class Tree :
         return my_loss - chid_loss
     
     def _bestSplit(self, X, y, features) :
-
+        """
+        Args: 
+            {np.ndarray}      X : Observations
+            {np.array}        y : Labels for X's observations
+            {np.array} features : Features to be considered on which to look for the best split
+        Return:
+            {tuple(int, int)} : Feature and Threshold that best split our data
+        """
         split = {
             'score' : -1, 
             'feature' : None, 
@@ -91,6 +100,7 @@ class Tree :
                     split['score'] = score
                     split['feature'] = feature
                     split['threshold'] = t
+
         return split['feature'], split['threshold']
 
 
@@ -101,16 +111,23 @@ class Tree :
         return False
 
     def _build(self, X, y, depth = 0) : 
+        """
+        Recursive function that build the Tree
 
+        Args: 
+            {np.ndarray} X : Observations
+            {np.array}   y : Labels for X's observations
+            {int}    depth : Current depth of the three
+        Return: 
+            {Tree} root : Save in self.root the root of the tree 
+        """
         self.n_samples, self.n_features = X.shape
         self.n_classes = len(np.bincount(y))
 
 
         # base case
         if self._finished(depth) :
-            if np.unique(y).size == 0: 
-                return  
-            return Node(value = np.argmax(np.unique(y)))
+            return Node(value = np.argmax(np.bincount(y)))
         
         
         # At the moment we select random features but we can choose the one with the smallest entropy as well
@@ -126,10 +143,29 @@ class Tree :
         return Node(best_feat, best_thresh, l, r)
     
     def fit(self, X, y): 
+        """
+        Build the tree
+
+        Args: 
+            {np.ndarray} X : Observations
+            {np.array}   y : Labels for X's observations
+        Return: 
+            {Tree} root : Save in self.root the root of the tree 
+        """
         self.root = self._build(X,y)
     
 
     def _traverse(self, x, node): 
+        """
+        Recursive function to explore the tree
+
+        Args: 
+            {np.ndarray} x : Observation
+            {np.array}   y : Labels for X's observations
+        Return: 
+            {int} prediction for x
+        """
+
         if node.is_leaf():
             return node.value
         
@@ -137,27 +173,14 @@ class Tree :
             return self._traverse(x, node.left)
         return self._traverse(x, node.right)
 
-    def predict(self, X) : 
+    def predict(self, X) :
+        """
+        Bulk prediction 
+
+        Args: 
+            {np.ndarray} X : Observations
+        Return: 
+            {list} predictions : list of predictions on X
+        """ 
         predictions = [self._traverse(x, self.root) for x in X]
         return predictions
-
-
-from sklearn.model_selection import train_test_split
-from sklearn import tree
-
-X = dF.drop(['Y'], axis = 1).to_numpy() 
-y = dF.Y.to_numpy()
-
-X_train, X_test, Y_train, Y_test = train_test_split(X, y, train_size=0.9)
-
-mytree = Tree()
-mytree.fit(X_train, Y_train)
-
-pred = mytree.predict(X_test)
-
-print(sum(pred == Y_test) / Y_test.shape[0])
-
-clf = tree.DecisionTreeClassifier(criterion='entropy', max_depth=6, min_samples_split=2).fit(X_train, Y_train)
-
-pred = clf.predict(X_test)
-print(sum(pred == Y_test) / Y_test.shape[0])
