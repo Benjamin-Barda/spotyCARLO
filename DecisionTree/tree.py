@@ -1,6 +1,9 @@
-import numpy as np 
-import pandas as pd
-from node import Node
+import numpy as np
+
+# from node import Node
+from DecisionTree.node import Node
+
+
 
 class Tree : 
     """
@@ -184,3 +187,9 @@ class Tree :
         """ 
         predictions = [self._traverse(x, self.root) for x in X]
         return predictions
+
+
+    def __str__(self) :
+
+        s = "tree" 
+        return (s)
