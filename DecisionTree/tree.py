@@ -176,7 +176,7 @@ class Tree :
             return self._traverse(x, node.left)
         return self._traverse(x, node.right)
 
-    def predict(self, X) :
+    def predict(self, X, trgt = None) :
         """
         Bulk prediction 
 
@@ -186,6 +186,13 @@ class Tree :
             {list} predictions : list of predictions on X
         """ 
         predictions = [self._traverse(x, self.root) for x in X]
+
+        if trgt != None : 
+            assert trgt.shape[0] == len(predictions) 
+            acc = sum(predictions == trgt) / trgt.shape[0]
+
+            return predictions, acc
+
         return predictions
 
 
@@ -193,3 +200,6 @@ class Tree :
 
         s = "tree" 
         return (s)
+
+
+t = Tree()
