@@ -2,7 +2,7 @@ class Node :
     """
     Class rappresenting a node in a decision Tree
     """
-    def __init__(self, feature = None, thresh = None,  left = None, right = None, value = None) : 
+    def __init__(self, feature = None, thresh = None,  left = None, right = None, *, value = None) : 
         """
         Args: 
             {int} Feature    : which feature split is performed on

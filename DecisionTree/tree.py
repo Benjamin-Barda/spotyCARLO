@@ -51,9 +51,8 @@ class Tree :
             {float32} entropy : Entropy impurity (ref. https://en.wikipedia.org/wiki/Entropy_(information_theory) )
 
         """
-
-        a =  np.bincount(Y) / Y.shape[0]
-        entropy = - np.sum(a * np.log2(a + 1e-9))
+        prop =  np.bincount(Y) / Y.shape[0]
+        entropy = -np.sum([a * np.log2(a) for a in prop if a > 0])
         return entropy
 
     def _infGain(self, X, y, thresh) : 
@@ -74,6 +73,9 @@ class Tree :
         l_idx, r_idx = self._split(X, thresh)
 
         n, n_l, n_r = len(y), len(l_idx), len(r_idx)
+
+        if n_l == 0 or n_r == 0: 
+            return 0
 
         chid_loss = (n_l / n) * self._entropyImpurity(y[l_idx]) + (n_r / n) * self._entropyImpurity(y[r_idx])
 
@@ -125,7 +127,7 @@ class Tree :
             {Tree} root : Save in self.root the root of the tree 
         """
         self.n_samples, self.n_features = X.shape
-        self.n_classes = len(np.bincount(y))
+        self.n_classes = len(np.unique(y))
 
 
         # base case
@@ -140,6 +142,7 @@ class Tree :
 
         #recursive step
         l_idx, r_idx = self._split( X[:, best_feat], best_thresh)
+
         l = self._build( X[l_idx, :], y[l_idx], depth + 1)
         r = self._build(X[r_idx, :], y[r_idx], depth + 1)
 
@@ -200,6 +203,3 @@ class Tree :
 
         s = "tree" 
         return (s)
-
-
-t = Tree()
