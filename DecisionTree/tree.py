@@ -11,7 +11,7 @@ class Tree :
     classification Algorithm
     """
 
-    def __init__(self, max_depth = 6, min_sample_per_split=2) : 
+    def __init__(self, max_depth = 6, min_sample_per_split=2, inForest = False) : 
         """
         Args: 
             {int} max_depth : Max depth the tree can reach 
@@ -19,6 +19,8 @@ class Tree :
         Return: 
             {Tree} self : Initialize the Tree object
         """
+
+        self.in_forest = inForest
 
         self.max_depth = max_depth 
         self.min_sample_per_split = min_sample_per_split
@@ -136,8 +138,10 @@ class Tree :
         
         
         # At the moment we select random features but we can choose the one with the smallest entropy as well
-        feats = np.random.choice(self.n_features, self.n_features, replace=False)
-
+        if self.in_forest:
+            feats = np.random.choice(self.n_features, int(np.sqrt(self.n_features)), replace=False)
+        else: 
+            feats = np.random.choice(self.n_features, self.n_features, replace=False)
         best_feat, best_thresh = self._bestSplit(X, y, feats)
 
         #recursive step
