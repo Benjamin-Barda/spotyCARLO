@@ -22,7 +22,7 @@ print(X.shape)
 #Split in train and validation
 x_train, x_test, y_train, y_test = train_test_split(X, y,  train_size=.75)
 
-f = Forest(128, max_depth=5) 
+f = Forest(32, max_depth=5) 
 f.fit(x_train, y_train)
 
 p = f.predict(x_test.to_numpy())
