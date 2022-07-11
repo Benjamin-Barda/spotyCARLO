@@ -25,20 +25,18 @@ class Forest :
             t_boot = Tree(inForest=True)
             t_boot.fit(x_boot, y_boot)
             self.forest.append(t_boot)
+
         
         self._fit = True
 
     def predict(self, X) : 
-        # X.shape (n_samples, n_feat)
-        # len(pred(X)) = n_samples
-        # predforest(n_forest, n_samples) 
-
-
         final = list()
 
         if not self._fit : 
             print("Forest not yet populated")
             return -1
+
+        # Shape = (num_trees, num_samples)
         preds = np.zeros((self.B, len(X)), dtype=np.int64)
 
         for b,tree in enumerate(self.forest) :
