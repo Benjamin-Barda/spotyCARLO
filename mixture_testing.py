@@ -20,5 +20,5 @@ x_train, x_test, y_train, y_test = train_test_split(X, y, random_state=43, train
 
 
 m = mixtureModel(4)
-m.fit(X.to_numpy(),y.to_numpy())
+m.fit(X.to_numpy())
 
