@@ -13,7 +13,7 @@ class Node :
         Return:
             {Node} : Initialize the Node Object
         """
-        
+
         self.feature = feature
         self.value = value
         self.left = left

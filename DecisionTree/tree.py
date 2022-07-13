@@ -1,5 +1,4 @@
 import numpy as np
-
 # from node import Node
 from DecisionTree.node import Node
 
@@ -90,7 +89,7 @@ class Tree :
             {np.array}        y : Labels for X's observations
             {np.array} features : Features to be considered on which to look for the best split
         Return:
-            {tuple(int, int)} : Feature and Threshold that best split our data
+            {tuple(int, int)} : Feature and Threshold that best split our data based on IG.
         """
         split = {
             'score' : -1, 
@@ -101,6 +100,8 @@ class Tree :
         for feature in features : 
             X_feat = X[:, feature]
             thresholds = np.unique(X_feat)
+            #TODO : try split not 
+            # T <- linspace 
             for t in thresholds : 
                 score = self._infGain(X_feat, y, t)
                 if score > split['score'] : 
@@ -136,12 +137,12 @@ class Tree :
         if self._finished(depth) :
             return Node(value = np.argmax(np.bincount(y)))
         
-        
-        # At the moment we select random features but we can choose the one with the smallest entropy as well
+
         if self.in_forest:
             feats = np.random.choice(self.n_features, int(np.sqrt(self.n_features)), replace=False)
         else: 
             feats = np.random.choice(self.n_features, self.n_features, replace=False)
+
         best_feat, best_thresh = self._bestSplit(X, y, feats)
 
         #recursive step
@@ -201,9 +202,12 @@ class Tree :
             return predictions, acc
 
         return predictions
-
-
+        
     def __str__(self) :
 
         s = "tree" 
         return (s)
+
+
+        
+        
