@@ -34,21 +34,22 @@ class LinearRegression():
                 test2 = np.concatenate((test2,test**i),axis=1)
         return test2.dot(self.theta)
     
-    def plotModel(self):
+    def plotModel(self,xlim = 1,ylim = 1):
         if len(self.theta) == 3 and self.degree == 1:
             fig = plt.figure()
             ax = fig.add_subplot(111,projection='3d')
-            xx, yy = np.meshgrid(range(110), range(110))
+            xlim, ylim = np.linspace(0,xlim,70), np.linspace(0,ylim,70)
+            xx, yy = np.meshgrid(xlim, ylim)
             def plane(A,B):
                 return self.theta[0] + self.theta[1]*A + self.theta[2]*B
             ax.scatter(self.X_copy.iloc[:,0], self.X_copy.iloc[:,1], self.Y, color='green')
             ax.plot_surface(xx, yy, plane(xx,yy), alpha=0.5)
             ax.set_xlabel(self.X_copy.columns.values[0])
             ax.set_ylabel(self.X_copy.columns.values[1])
-            ax.set_zlabel(self.Y.name)
+            ax.set_zlabel(self.Y.columns.values[0])
             plt.show()
         elif len(self.theta) == (1 + self.degree):
-            plt.scatter(self.X_copy,self.Y)
+            plt.scatter(self.X_copy,self.Y,s=9.5,alpha=0.8)
             xmin,xmax = float(self.X_copy.min()),float(self.X_copy.max())
             bounds = np.linspace(xmin,xmax,70)[:,np.newaxis]
             Xaxis = np.insert(bounds,0,1,axis=1)
@@ -56,18 +57,19 @@ class LinearRegression():
                 Xaxis = np.concatenate((Xaxis,bounds**i),axis=1)
             def line(A):
                 return A.dot(self.theta)
-            plt.plot(bounds,line(Xaxis),color='red')
+            plt.plot(bounds,line(Xaxis),color='red',lw=2)
             plt.show()
         else:
             raise Exception("ERROR: can't plot, too many dimensions")
 
-dF = pd.read_csv('data//csvs/dataframeV1.csv', index_col=0)
-x = dF[['tempo']]
-y = dF[['danceability']]
+dF = pd.read_csv('data//csvs/dataframeV2.csv', index_col=0)
+x = dF.drop(['popularity','id','uri','label'],axis=1)
+y = dF[['popularity']]
+#print(y.mean())
 LR = LinearRegression()
 LR.fit(x,y)
-#test = [45,13]
+#test = [[0.712,0.772,10,-3.024,0,0.346,0.0521,4.35e-06,0.0368,0.848,84.722,249480,4]]
 #res = LR.predict(test)
-LR.plotModel()
+#LR.plotModel()
 print(LR.R_squared)
 #print(res)
