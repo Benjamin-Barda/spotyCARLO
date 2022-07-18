@@ -40,18 +40,16 @@ xx, yy = np.meshgrid(xrange, yrange)
 
 # Use models to create a prediciton plane - Logistic Regression
 pred_LR = logreg.predict_proba(np.c_[xx.ravel(), yy.ravel()])
-print(pred_LR)
 pred_LR = pred_LR[:,1].reshape(xx.shape)
 mask_0 = y_test < 0.5   
 mask_1 = y_test > 0.5
 
 # Create a 3D scatter plot with predictions
-print(y_test.ravel())
 fig = px.scatter_3d(dF, x=x_train['danceability'], y=x_train['energy'], z=y_train.ravel(), 
                  opacity=0.8, color_discrete_sequence=['black'],
-                 labels=dict(x="Rating Points Difference Between White and Black", 
-                             y="Number of Turns",
-                             z="Predicted Probability for White Win",))
+                 labels=dict(x="Danceability", 
+                             y="Energy",
+                             z="Predicted Probability to be Metal",))
 
 # Set figure title and colors
 fig.update_layout(title_text="Scatter 3D Plot with LR Prediction Surface",

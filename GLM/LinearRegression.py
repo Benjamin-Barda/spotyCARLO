@@ -76,10 +76,6 @@ LR.fit(x,y)
 res = LR.predict(x)
 #LR.plotModel()
 print(LR.R_squared)
-<<<<<<< HEAD
 print(float(np.sum(abs(res-y)/1382)))
 print(pd.DataFrame(res).describe())
 #print(res)
-=======
-
->>>>>>> 4b5c133842e4e6a299fc10975f067795678b5175
