@@ -9,8 +9,8 @@ class LinearRegression():
 
     def fit(self,X,Y):
         self.X_copy = X.copy()
-        self.X = X
-        self.Y = Y
+        self.X = X.copy()
+        self.Y = Y.copy()
         self.X.insert(0,'intercept',1)             # building the design matrix adding column of ones (1,1,1,1,...,1)
         if self.degree > 1:                        # in case of polynomial regression
             if self.X.shape[1] != 2:
@@ -73,8 +73,13 @@ y = dF[['popularity']]
 #print(y.mean())
 LR = LinearRegression()
 LR.fit(x,y)
-#test = [[0.712,0.772,10,-3.024,0,0.346,0.0521,4.35e-06,0.0368,0.848,84.722,249480,4]]
-#res = LR.predict(test)
+res = LR.predict(x)
 #LR.plotModel()
 print(LR.R_squared)
+<<<<<<< HEAD
+print(float(np.sum(abs(res-y)/1382)))
+print(pd.DataFrame(res).describe())
+#print(res)
+=======
 
+>>>>>>> 4b5c133842e4e6a299fc10975f067795678b5175
