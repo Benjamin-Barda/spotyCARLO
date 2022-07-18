@@ -27,4 +27,4 @@ f.fit(x_train, y_train)
 
 p = f.predict(x_test.to_numpy())
 print(sum(p == y_test) / len(y_test))
-
+print(x_test)

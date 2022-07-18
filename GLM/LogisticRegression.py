@@ -6,8 +6,8 @@ from sklearn.metrics import accuracy_score
 
 
 dF = pd.read_csv('data//csvs/dataframeV2.csv', index_col=0)
-x = dF.drop(['id','uri','label'],axis=1).to_numpy()
-y = dF[['label']].to_numpy().reshape(1382)
+x = dF.drop(['id','uri','label'],axis=1)
+y = dF[['label']].to_numpy().ravel()
 
 ly = LabelEncoder()
 y = ly.fit_transform(y)

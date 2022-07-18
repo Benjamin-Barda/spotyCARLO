@@ -49,5 +49,16 @@ class Forest :
             final.append(temp)
 
         return final 
+    
+    def score(self, X, y): 
+        preds = self.predict(X)
+
+        return sum(preds == y) / len(preds)
+
+    def get_params(self, deep = False) : 
+        return {'max_trees' :self.B }
+
+    def get_max_trees(self) : 
+        return self.B
 
         
