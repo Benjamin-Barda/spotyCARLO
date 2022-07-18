@@ -19,7 +19,8 @@ class LinearRegression():
                 self.X.insert(i,x.columns.values[1]+f'^{i}',x.iloc[:,1]**i)                             # create columns of powers of the first feature up to the degree selected
         self.theta = ((np.linalg.inv(self.X.T @ self.X)) @ (self.X.T) @ self.Y).to_numpy()              #closed form of linear regression
        
-        InitVar = self.Y.var()                                  # Initial variance of the explained variable
+        #InitVar = self.Y.var() * (len(self.Y) - 1)              # Initial SSR of the explained variable in relation to their mean
+        InitVar = np.sum((self.Y - self.Y.mean())**2)
         SSR = np.sum((self.predict(self.X_copy)-self.Y)**2)     # Sum of Square residual after regression
         self.R_squared = float(1 - (SSR / InitVar))                    # R2
         return self.theta
@@ -72,4 +73,4 @@ LR.fit(x,y)
 #res = LR.predict(test)
 #LR.plotModel()
 print(LR.R_squared)
-#print(res)
+
