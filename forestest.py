@@ -5,7 +5,7 @@ from DecisionTree.tree import Tree
 from RandomForest.randomForest import Forest
 
 
-dF = pd.read_csv('data//csvs//dataframeV1.csv', index_col=0)
+dF = pd.read_csv('data//csvs//dataframeV2.csv', index_col=0)
 dF = dF.drop(['id', 'uri'], axis = 1)
 dF.head()
 
@@ -27,4 +27,3 @@ f.fit(x_train, y_train)
 
 p = f.predict(x_test.to_numpy())
 print(sum(p == y_test) / len(y_test))
-print(x_test)
