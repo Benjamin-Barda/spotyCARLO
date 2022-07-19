@@ -1,11 +1,14 @@
+from lib2to3.pytree import Base
 import numpy as np 
 import pandas as pd
 from DecisionTree.tree import Tree
+from sklearn.base import BaseEstimator
 
 
-class Forest : 
+class Forest(BaseEstimator) : 
 
     def __init__(self, max_trees = 10, max_depth = 6, min_sample_split = 2) : 
+
 
         self.B = max_trees
         self.max_depth = max_depth 
@@ -29,7 +32,12 @@ class Forest :
         
         self._fit = True
 
-    def predict(self, X) : 
+    def predict(self, X) :
+
+        if type(X).__module__ != np.__name__: 
+            X = X.to_numpy()
+
+
         final = list()
 
         if not self._fit : 
@@ -55,10 +63,16 @@ class Forest :
 
         return sum(preds == y) / len(preds)
 
-    def get_params(self, deep = False) : 
-        return {'max_trees' :self.B }
+    def get_params(self,deep=True) : 
+        return {
+            'max_trees' : self.B,
+            'max_depth' : self.max_depth, 
+            'min_sample_split' : self.min_sample_split 
+            }
+    
+    def set_params(self, **params):
+        for parameter, value in params.items() : 
+            setattr(self, parameter, value)
 
-    def get_max_trees(self) : 
-        return self.B
 
         

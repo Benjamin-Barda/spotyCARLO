@@ -44,7 +44,7 @@ class LinearRegression():
             def plane(A,B):
                 return self.theta[0] + self.theta[1]*A + self.theta[2]*B
             ax.scatter(self.X_copy.iloc[:,0], self.X_copy.iloc[:,1], self.Y, color='green')
-            ax.plot_surface(xx, yy, plane(xx,yy), alpha=0.5)
+            ax.plot_surface(xx, yy, plane(xx,yy), alpha=0.7)
             ax.set_xlabel(self.X_copy.columns.values[0])
             ax.set_ylabel(self.X_copy.columns.values[1])
             ax.set_zlabel(self.Y.columns.values[0])
@@ -64,6 +64,10 @@ class LinearRegression():
             raise Exception("ERROR: can't plot, too many dimensions")
 
 dF = pd.read_csv('data//csvs/dataframeV2.csv', index_col=0)
+dF2 = pd.read_csv('data//csvs/Top50_clean.csv',index_col=0)
+#x = dF.drop(['popularity','id','uri','label'],axis=1)
+dF = pd.concat([dF,dF2])
+#dF['artist_followers'] = (dF['artist_followers']-14)/(99952640 - 14)
 x = dF.drop(['popularity','id','uri','label'],axis=1)
 y = dF[['popularity']]
 #print(y.mean())
@@ -72,10 +76,6 @@ LR.fit(x,y)
 res = LR.predict(x)
 #LR.plotModel()
 print(LR.R_squared)
-<<<<<<< HEAD
 print(float(np.sum(abs(res-y)/1382)))
 print(pd.DataFrame(res).describe())
 #print(res)
-=======
-
->>>>>>> 4b5c133842e4e6a299fc10975f067795678b5175
