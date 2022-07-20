@@ -16,7 +16,7 @@ class LinearRegression():
             if self.X.shape[1] != 2:
                 raise Exception("ERROR: trying to do polynomial regression with multiple dimensions")                  
             for i in range(2,self.degree + 1):                                                          # "basis function" to lift up the features 
-                self.X.insert(i,x.columns.values[1]+f'^{i}',x.iloc[:,1]**i)                             # create columns of powers of the first feature up to the degree selected
+                self.X.insert(i,self.X.columns.values[1]+f'^{i}',self.X.iloc[:,1]**i)                             # create columns of powers of the first feature up to the degree selected
         self.theta = ((np.linalg.inv(self.X.T @ self.X)) @ (self.X.T) @ self.Y).to_numpy()              #closed form of linear regression
        
         #InitVar = self.Y.var() * (len(self.Y) - 1)              # Initial SSR of the explained variable in relation to their mean
@@ -70,7 +70,7 @@ dF2 = pd.read_csv('data//csvs/Top50_clean.csv',index_col=0)
 dF = pd.concat([dF,dF2])
 #dF['artist_followers'] = (dF['artist_followers']-14)/(99952640 - 14)
 x = dF.drop(['popularity','id','uri','label'],axis=1)
-y = dF[['popularity']]
+y = dF['popularity']
 #print(y.mean())
 LR = LinearRegression()
 LR.fit(x,y)
@@ -78,6 +78,6 @@ res = LR.predict(x)
 #LR.plotModel()
 print(LR.R_squared)
 print(float(np.sum(abs(res-y)/1382)))
-print(pd.DataFrame(res).describe())
+#print(pd.DataFrame(res).describe())
 #print(res)
 '''
