@@ -63,6 +63,7 @@ class LinearRegression():
         else:
             raise Exception("ERROR: can't plot, too many dimensions")
 
+'''
 dF = pd.read_csv('data//csvs/dataframeV2.csv', index_col=0)
 dF2 = pd.read_csv('data//csvs/Top50_clean.csv',index_col=0)
 #x = dF.drop(['popularity','id','uri','label'],axis=1)
@@ -79,3 +80,4 @@ print(LR.R_squared)
 print(float(np.sum(abs(res-y)/1382)))
 print(pd.DataFrame(res).describe())
 #print(res)
+'''
