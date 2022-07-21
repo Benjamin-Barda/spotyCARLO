@@ -21,8 +21,10 @@ class LinearRegression():
        
         #InitVar = self.Y.var() * (len(self.Y) - 1)              # Initial SSR of the explained variable in relation to their mean
         InitVar = np.sum((self.Y - self.Y.mean())**2)
-        SSR = np.sum((self.predict(self.X_copy)-self.Y)**2)     # Sum of Square residual after regression
+        preds = self.predict(self.X_copy)
+        SSR = np.sum((preds-self.Y)**2)     # Sum of Square residual after regression
         self.R_squared = float(1 - (SSR / InitVar))                    # R2
+        self.MeanAbsError = float(np.sum(abs(preds-self.Y)/self.X_copy.shape[0]))
         return self.theta
             
     def predict(self, test ):
@@ -77,7 +79,7 @@ LR.fit(x,y)
 res = LR.predict(x)
 #LR.plotModel()
 print(LR.R_squared)
-print(float(np.sum(abs(res-y)/1382)))
+print(LR.MeanAbsError)
 #print(pd.DataFrame(res).describe())
 #print(res)
 '''
