@@ -139,7 +139,7 @@ class Tree :
         
 
         if self.in_forest:
-            feats = np.random.choice(self.n_features, int(np.sqrt(self.n_features)), replace=False) 
+            feats = np.random.choice(self.n_features, round(np.sqrt(self.n_features)), replace=False) 
         else: 
             feats = np.random.choice(self.n_features, self.n_features, replace=False)
 
