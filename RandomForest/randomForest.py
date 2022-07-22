@@ -23,7 +23,7 @@ class Forest(BaseEstimator) :
 
         # Bootstrap
         for b in range(self.B): 
-            df_boot = con.sample(n = len(con), replace = True)
+            df_boot = con.sample(n = len(con), replace = True, random_state=self.rs)
             y_boot = df_boot.Y.to_numpy()
             x_boot = df_boot.drop(['Y'], axis = 1).to_numpy()
             t_boot = Tree(inForest=True, random_seed=self.rs)
