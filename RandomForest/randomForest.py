@@ -7,8 +7,9 @@ from sklearn.base import BaseEstimator
 
 class Forest(BaseEstimator) : 
 
-    def __init__(self, max_trees = 10, max_depth = 6, min_sample_split = 2) : 
+    def __init__(self, max_trees = 10, max_depth = 6, min_sample_split = 2, random_seed = None) :
 
+        self.rs = random_seed
 
         self.B = max_trees
         self.max_depth = max_depth 
@@ -25,7 +26,7 @@ class Forest(BaseEstimator) :
             df_boot = con.sample(n = len(con), replace = True)
             y_boot = df_boot.Y.to_numpy()
             x_boot = df_boot.drop(['Y'], axis = 1).to_numpy()
-            t_boot = Tree(inForest=True)
+            t_boot = Tree(inForest=True, random_seed=self.rs)
             t_boot.fit(x_boot, y_boot)
             self.forest.append(t_boot)
 

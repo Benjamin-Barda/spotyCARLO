@@ -1,6 +1,6 @@
 import numpy as np 
 import pandas as pd
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from DecisionTree.tree import Tree
 from RandomForest.randomForest import Forest
 
@@ -22,8 +22,6 @@ print(X.shape)
 #Split in train and validation
 x_train, x_test, y_train, y_test = train_test_split(X, y,  train_size=.75)
 
-f = Forest(32, max_depth=5) 
-f.fit(x_train, y_train)
 
-p = f.predict(x_test.to_numpy())
-print(sum(p == y_test) / len(y_test))
+# This reproduce the error.
+Forest(max_trees=13, max_depth=4, random_seed=20).fit(X, y)
