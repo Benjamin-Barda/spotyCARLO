@@ -139,7 +139,12 @@ class Tree :
 
         # base case
         if self._finished(depth) :
-            return Node(value = np.argmax(np.bincount(y)))
+            # This try except is more of a temp-fix ... for now it does the job but we need to check better
+            try:
+                return Node(value = np.argmax(np.bincount(y)))
+            except(ValueError): 
+                print("FAILED - EMPTY SEQ HANDLED")
+                return Node()
         
 
         if self.in_forest:
