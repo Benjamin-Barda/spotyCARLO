@@ -60,19 +60,3 @@ class GMM:
         weights = self.predict_proba(X)
         return np.argmax(weights, axis=1)
 
-dF = pd.read_csv('data//csvs//dataframeV1.csv', index_col=0)
-dF = dF.drop(['id', 'uri'], axis = 1)
-dF.label = pd.Categorical(dF.label)
-dF['Y'] = dF.label.cat.codes
-dF = dF.drop(['label'], axis = 1)
-# Prepare the dataset for the decision tree
-y = dF.Y 
-X = dF.drop(["Y"], axis=1)
-X = X.to_numpy()
-pca = PCA(n_components=2)
-X = pca.fit_transform(X)
-gmm = GMM(4,max_iter=100)
-gmm.fit(X)
-clusters = gmm.predict(X)
-plt.scatter(X[:,0],X[:,1],c = clusters, cmap='rainbow')
-plt.show()
