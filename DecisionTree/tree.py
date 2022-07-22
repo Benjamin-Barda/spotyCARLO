@@ -10,7 +10,7 @@ class Tree :
     classification Algorithm
     """
 
-    def __init__(self, max_depth = 6, min_sample_per_split=2, inForest = False) : 
+    def __init__(self, max_depth = 6, min_sample_per_split=2, inForest = False, random_seed = None) : 
         """
         Args: 
             {int} max_depth : Max depth the tree can reach 
@@ -24,6 +24,10 @@ class Tree :
         self.max_depth = max_depth 
         self.min_sample_per_split = min_sample_per_split
         self.root = None
+
+    
+        if random_seed is not None : 
+            np.random.seed(random_seed)
 
     def _split(self, X, thresh) : 
         """
