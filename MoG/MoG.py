@@ -5,9 +5,10 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 
 class GMM:
-    def __init__(self, k, max_iter=5):
+    def __init__(self, k, max_iter=5, random_seed = None):
         self.k = k
         self.max_iter = int(max_iter)
+        self.rs = random_seed
 
     def initialize(self, X):
         self.shape = X.shape
@@ -16,6 +17,9 @@ class GMM:
         self.phi = np.full(shape=self.k, fill_value=1/self.k)
         self.weights = np.full( shape=self.shape, fill_value=1/self.k)
         
+        if self.rs != None:
+            np.random.seed(self.rs)
+            
         random_row = np.random.randint(low=0, high=self.n, size=self.k)
         self.mu = [  X[row_index,:] for row_index in random_row ]
         self.sigma = [ np.cov(X.T) for _ in range(self.k) ]
