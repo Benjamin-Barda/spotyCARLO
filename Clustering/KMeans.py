@@ -55,7 +55,7 @@ class KMeans_plus_plus:
         return np.argmax([ self.__min_dist(point,centroids ) for point in self.X])
         
     def __min_dist(self, point, centroids):
-        return min( [ self.euclidean_distance(point, centroid) for centroid in centroids] ) 
+        return min( [ self.euclidean_distance(point, centroid)**2 for centroid in centroids] ) 
     
     ##########################################################################################
     # get the how_many_centroids "centroids". 1 if k-means++, but k if k-means
@@ -120,7 +120,7 @@ class KMeans_plus_plus:
     
     # arg that minimizes the distance of the current sample to each centroid
     def __closest_centroid_label(self, point, centroids):
-        return np.argmin( [ self.euclidean_distance(point, centroid) for centroid in centroids] ) 
+        return np.argmin( [ self.euclidean_distance(point, centroid)**2 for centroid in centroids] ) 
 
     # assign mean value of clusters to centroids; Maximisation step
     def __centroids_means_of_clusters(self, clusters):
@@ -128,9 +128,9 @@ class KMeans_plus_plus:
         
     # distances between each old and new centroids
     def __has_converged(self, old_centroids, current_centroids):
-        distances = [self.euclidean_distance(old_centroids[i], current_centroids[i]) for i in range(self.K)]
+        distances = [self.euclidean_distance(old_centroids[i], current_centroids[i])**2 for i in range(self.K)]
         return sum(distances) == 0
     
     def euclidean_distance(self, point1, point2):
         dist = la.norm(point1 - point2)
-        return np.square(dist)
+        return dist
