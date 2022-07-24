@@ -63,3 +63,4 @@ class GMM:
     def predict(self, X):
         weights = self.predict_proba(X)
         return np.argmax(weights, axis=1)
+
