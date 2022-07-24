@@ -64,22 +64,4 @@ class LinearRegression():
             plt.show()
         else:
             raise Exception("ERROR: can't plot, too many dimensions")
-
-'''
-dF = pd.read_csv('data//csvs/dataframeV2.csv', index_col=0)
-dF2 = pd.read_csv('data//csvs/Top50_clean.csv',index_col=0)
-#x = dF.drop(['popularity','id','uri','label'],axis=1)
-dF = pd.concat([dF,dF2])
-#dF['artist_followers'] = (dF['artist_followers']-14)/(99952640 - 14)
-x = dF.drop(['popularity','id','uri','label'],axis=1)
-y = dF['popularity']
-#print(y.mean())
-LR = LinearRegression()
-LR.fit(x,y)
-res = LR.predict(x)
-#LR.plotModel()
-print(LR.R_squared)
-print(LR.MeanAbsError)
-#print(pd.DataFrame(res).describe())
-#print(res)
-'''
+            
